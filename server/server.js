@@ -51,6 +51,17 @@ app.get('/ReceiptApi/read', async function(req, res){
 
 });
 
+//verirfy login
+app.post('/login', async function(req, res){
+    
+    $email = 'devtest1@gmail.com';
+    $password = '12345'; 
+    
+    if(req.body.email === $email && req.body.password === $password){
+        res.status(200).json({"success": true, "message":"Login is successful"});
+    }
+});
+
 
 app.post('/Receipt/post', async function(req, res){
     const receipt = new Receipt({
