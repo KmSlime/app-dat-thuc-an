@@ -1,0 +1,53 @@
+[
+    {
+        "_id": "625832d5a1cea41e2cfb39b0",
+        "email": "LiemGaVCL@gmail.com",
+        "__v": 0
+    },
+    {
+        "_id": "625832fda1cea41e2cfb39b2",
+        "email": "1234@gmail.com",
+        "__v": 0
+    },
+    {
+        "_id": "625833a00012694c2ce24592",
+        "name": "Liem Xau Trai",
+        "email": "1234@gmail.com",
+        "password": "123455",
+        "__v": 0
+    },
+    {
+        "_id": "625833a70012694c2ce24594",
+        "name": "Liem Xau Trai",
+        "email": "asdljalwidjaliwjd@gmail.com",
+        "password": "123455",
+        "__v": 0
+    }
+]
+
+[
+	{
+		"foodname": "bún bò",
+		"price":  35000,
+		"image": "https://i.imgur.com/LlfnUbj.jpeg",
+		"quality": 5,
+		"description": "nothing"
+	},
+	
+	{
+		"foodname": "phở",
+		"price":  40000,
+		"image": "https://i.imgur.com/1tIDGoR.jpeg",
+		"quality": 4,
+		"description": "nothing"
+	},
+	
+	{
+		"foodname": "bò nướng beefsteak",
+		"price":  85000,
+		"image": "https://i.imgur.com/LqqUAOr.jpeg",
+		"quality": 5,
+		"description": "nothing"
+	}
+	
+]

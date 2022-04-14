@@ -48,7 +48,6 @@ app.post('/post', async function(req, res){
 app.get('/ReceiptApi/read', async function(req, res){
     const receipt = await Receipt.find().exec();
     res.status(200).json(receipt);
-
 });
 
 //verirfy login
