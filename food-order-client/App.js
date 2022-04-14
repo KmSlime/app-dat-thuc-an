@@ -1,61 +1,105 @@
-import * as React from "react";
-import {
-  StyleSheet,
-  Text,
-  View,
-  Image,
-  StatusBar,
-  TextInput,
-  ScrollView,
-  TouchableOpacity,
-  FlatList
-} from "react-native";
+import React, { useState, useEffect } from "react";
+import { StyleSheet, Text, View, Image, StatusBar, TextInput, ScrollView, TouchableOpacity, FlatList } from 'react-native';
 import { Input, Button, Header, Icon, SearchBar } from "react-native-elements";
 import { Ionicons } from "@expo/vector-icons";
-import { images } from "../Constants";
 
-import { SafeAreaProvider, SafeAreaView } from "react-native-safe-area-context";
-
-import Navigators from "./src/navigators";
-
-// export default () => {
-//       <Navigators />
-// };
-
-const Home = props => {
-  const navigation = props.navigation;
-  const [Products, setProducts] = React.useState([
-    
+const App = () => {
+  const [isLoading, setLoading] = useState(true);
+  const [data, setData] = useState([]);
+  useEffect(() => {
+    fetch('http://192.168.1.174:3000/ReceiptApi/read')
+      .then((response) => response.json())
+      .then((json) => {
+        for(var i in json){
+          setData(json[i]);
+        }
+      })
+      .catch((error) => console.error(error))
+      .finally(() => setLoading(false));
+  }, []);
   
-  ]);
-  const [Categories, setCategories] = React.useState([
-    {
-      id: 0,
-      name: "Fruits "
-    },
-    {
-      id: 1,
-      name: "Vegetables"
-    },
-    {
-      id: 2,
-      name: "Dairy"
-    },
-    {
-      id: 3,
-      name: "Protein"
-    },
-    {
-      id: 4,
-      name: "Cereals"
-    }
-  ]);
-  const [selectedCategorie, setselectedCategorie] = React.useState(0);
-  function renderProducts() {
-    return Products.map((item, index) => {
-      return (
-        <TouchableOpacity
-          key={index}
+  return (
+    <>
+        <View style={styles.container}>
+      <View
+        Style={{
+          flex: 1
+        }}
+      >
+        <Header
+          containerStyle={{
+            height: 90,
+            backgroundColor: "#fff",
+            borderBottomColor: "#fff",
+            borderBottomWidth: 2,
+            elevation: 0
+          }}
+          placement="center"
+          leftComponent={
+            <TouchableOpacity
+              style={{ padding: 8 }}
+              onPress={() => console.log("menu function here")}
+            >
+              <Ionicons name="menu" size={27} color="#333" />
+            </TouchableOpacity>
+          }
+          centerComponent={{
+            text: "Food Order",
+            style: {
+              color: "#FF4C29",
+              fontSize: 22,
+              fontWeight: "bold",
+              marginTop: 10
+            }
+          }}
+          rightComponent={
+            <TouchableOpacity
+              style={{ padding: 8 }}
+              onPress={() => console.log("cart function here")}
+            >
+              <Ionicons name="cart-outline" size={27} color="#333" />
+            </TouchableOpacity>
+          }
+        />
+      </View>
+      <ScrollView
+        style={{ flex: 1, backgroundColor: "#fff" }}
+        showsVerticalScrollIndicator={false}
+      >
+        <View
+          style={{
+            paddingHorizontal: 21
+            
+          }}
+        >
+          <Text
+            style={{
+              color: "#333",
+              fontSize: 26,
+              fontWeight: "bold"
+            }}
+          >
+            Welcome !
+          </Text>
+        </View>
+        <View>
+          <SearchBar
+            placeholder="Search..."
+            containerStyle={{
+              backgroundColor: "#fff",
+              borderBottomColor: "#fff",
+              borderTopColor: "#fff"
+            }}
+            inputContainerStyle={{
+              backgroundColor: "#f1f1f1",
+              borderRadius: 15
+            }}
+            inputStyle={{
+              fontSize: 15
+            }}
+          />
+          <TouchableOpacity
+          key={data._id}
           style={{
             justifyContent: "center",
             marginRight: 5,
@@ -67,11 +111,11 @@ const Home = props => {
           }}
           onPress={() => {
             navigation.navigate("Details", {
-              id: item.id,
-              img: item.img,
-              name: item.name,
-              price: item.price,
-              desc: item.description
+              id: data.id,
+              img: data.img,
+              name: data.name,
+              price: data.price,
+              desc: data.description
             });
           }}
         >
@@ -84,7 +128,7 @@ const Home = props => {
             }}
           >
             <Image
-              source={item.img}
+              source = {{uri:`${data.image}`}}
               resizeMode="contain"
               style={{
                 width: "100%",
@@ -101,7 +145,7 @@ const Home = props => {
               numberOfLines={1}
               style={{ fontSize: 15, color: "#333", fontWeight: "bold" }}
             >
-              {item.name}
+              {data.foodname}
             </Text>
           </View>
           <View
@@ -125,7 +169,7 @@ const Home = props => {
                   fontWeight: "bold"
                 }}
               >
-                {item.price}
+                {data.price}
               </Text>
               <Text
                 style={{
@@ -159,119 +203,6 @@ const Home = props => {
             </View>
           </View>
         </TouchableOpacity>
-      );
-    });
-  }
-  function renderCategories(item, index) {
-    return (
-      <TouchableOpacity
-        style={{
-          justifyContent: "center",
-          borderWidth: 1,
-          borderColor: "#fff",
-          backgroundColor: selectedCategorie == item.id ? "#FF4C29" : "#f1f1f1",
-          borderRadius: 50,
-          paddingHorizontal: 12,
-          paddingVertical: 7,
-          marginLeft: 5
-        }}
-        onPress={() => {
-          setselectedCategorie(item.id);
-          console.log("categorie function here");
-        }}
-      >
-        <Text
-          style={{
-            fontSize: 16,
-            color: selectedCategorie == item.id ? "#fff" : "#1c1c1c",
-            marginRight: 3
-          }}
-        >
-          {item.name}
-        </Text>
-      </TouchableOpacity>
-    );
-  }
-
-  return (
-    <View style={styles.container}>
-      <View
-        Style={{
-          flex: 1
-        }}
-      >
-        <Header
-          containerStyle={{
-            height: 90,
-            backgroundColor: "#fff",
-            borderBottomColor: "#fff",
-            borderBottomWidth: 1,
-            elevation: 0
-          }}
-          placement="center"
-          leftComponent={
-            <TouchableOpacity
-              style={{ padding: 8 }}
-              onPress={() => console.log("menu function here")}
-            >
-              <Ionicons name="menu" size={27} color="#333" />
-            </TouchableOpacity>
-          }
-          centerComponent={{
-            text: "Food",
-            style: {
-              color: "#FF4C29",
-              fontSize: 22,
-              fontWeight: "bold",
-              marginTop: 10
-            }
-          }}
-          rightComponent={
-            <TouchableOpacity
-              style={{ padding: 8 }}
-              onPress={() => console.log("cart function here")}
-            >
-              <Ionicons name="cart-outline" size={27} color="#333" />
-            </TouchableOpacity>
-          }
-        />
-      </View>
-      <ScrollView
-        style={{ flex: 1, backgroundColor: "#fff" }}
-        showsVerticalScrollIndicator={false}
-      >
-        <View
-          style={{
-            paddingHorizontal: 21,
-            paddingVertical: 10
-          }}
-        >
-          <Text
-            style={{
-              color: "#333",
-              fontSize: 26,
-              fontWeight: "bold"
-            }}
-          >
-            Welcome !
-          </Text>
-        </View>
-        <View>
-          <SearchBar
-            placeholder="Search..."
-            containerStyle={{
-              backgroundColor: "#fff",
-              borderBottomColor: "#fff",
-              borderTopColor: "#fff"
-            }}
-            inputContainerStyle={{
-              backgroundColor: "#f1f1f1",
-              borderRadius: 15
-            }}
-            inputStyle={{
-              fontSize: 15
-            }}
-          />
         </View>
         <View
           style={{
@@ -279,13 +210,6 @@ const Home = props => {
             paddingVertical: 10
           }}
         >
-          <FlatList
-            horizontal
-            showsHorizontalScrollIndicator={false}
-            data={Categories}
-            keyExtractor={item => item.id.toString()}
-            renderItem={({ item, index }) => renderCategories(item, index)}
-          />
         </View>
         <View
           style={{
@@ -296,7 +220,6 @@ const Home = props => {
             width: "100%"
           }}
         >
-          {renderProducts()}
         </View>
       </ScrollView>
       <StatusBar
@@ -305,12 +228,32 @@ const Home = props => {
         translucent={true}
       />
     </View>
+    
+
+    {/* <View style={{ flex: 1, padding: 24 }}>
+      {isLoading ? <Text>Loading...</Text> : 
+      ( <View style={{ flex: 1, flexDirection: 'column', justifyContent:  'space-between'}}>
+          <Text style={{ fontSize: 18, color: 'green', textAlign: 'center', marginTop: 150}}>
+            {data.foodname}
+          </Text>
+          <Text style={{ fontSize: 14, color: 'green',}}>
+            Gía: {data.price}</Text>        
+          <Image source = {{uri:`${data.image}`}}
+          style = {{ width: 200, height: 200 }}
+   />
+        </View>
+      )}
+    </View> */}
+    </>
+  
   );
 };
+
 const styles = StyleSheet.create({
   container: {
     flex: 1,
     backgroundColor: "#fff"
   }
 });
-export default Home;
+
+export default App;
